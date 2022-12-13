@@ -125,6 +125,10 @@ abstract class ResponseBuilderBase
 	public const KEY_MSG_KEY   = 'msg_key';
 	/** @var string */
 	public const KEY_MSG_FORCE = 'msg_force';
+	/** @var string */
+	public const KEY_TIMESTAMP = 'timestamp';
+	/** @var string */
+	public const KEY_TIMEZONE = 'timezone';
 
 	/**
 	 * Default key to be used by exception handler while processing ValidationException
