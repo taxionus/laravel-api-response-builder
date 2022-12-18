@@ -488,7 +488,7 @@ class ResponseBuilder extends ResponseBuilderBase
 			RB::KEY_MESSAGE => $message,
 			RB::KEY_DATA    => $data,
 			RB::KEY_TIMESTAMP    => $date->getTimestamp(),
-			RB::KEY_TIMEZONE    => $date->getTimezone(),
+			RB::KEY_TIMEZONE    => $date->getTimezone()->getName(),
 		];
 
 		if ($debug_data !== null) {

@@ -1,53 +1,87 @@
 <?php
 
-// TODO: need to check helper function exists or not
+use Taxionus\ResponseBuilder\ResponseBuilder;
 
-// create helper function for response builder success
-if (!function_exists('success')) {
-    /**
-     * @param mixed $data
-     * @param int $code
-     * @param string $message
-     * @param array $headers
-     * @param int $options
-     * @return \Illuminate\Http\JsonResponse
-     */
-    function success($data = null, int $code = 200, string $message = '', array $headers = [], int $options = 0): \Illuminate\Http\JsonResponse
+/*
+    * @param $data
+    * @param null $msg
+    * @param int $http_code
+    * @return \Illuminate\Http\JsonResponse
+    */
+
+if (!function_exists('respond')) {
+    function respond($data, $msg = null, $http_code = 200)
     {
-        return \Taxionus\ResponseBuilder\ResponseBuilder::success($data, $code, $message, $headers, $options);
+        return ResponseBuilder::asSuccess($http_code)->withData($data["data"] ?? $data)->withMessage($data['message'] ?? $msg)->build();
+    }
+}
+
+/**
+ * @param $data
+ * @param null $msg
+ * @param int $http_code
+ * @return \Illuminate\Http\JsonResponse
+ */
+
+if (!function_exists('respondWithMessage')) {
+    function respondWithMessage($data, $msg = null, $http_code = 200)
+    {
+        return ResponseBuilder::asSuccess()->withMessage($msg["message"] ?? $msg)->build();
+    }
+}
+
+/**
+ * @param null $msg
+ * @param int $api_code
+ * @return \Illuminate\Http\JsonResponse
+ */
+
+if (!function_exists('respondWithError')) {
+    function respondWithError(
+        $msg = null,
+        $api_code = 500
+    ) {
+        return ResponseBuilder::asError($api_code)->withMessage($msg['message'] ?? $msg)->withHttpCode($api_code)->build();
+    }
+}
+
+/**
+ * @param $api_code
+ * @param array $data
+ * @param null $msg
+ * @param null $http_code
+ * @return \Illuminate\Http\JsonResponse
+ */
+
+if (!function_exists('respondWithDataError')) {
+    function respondWithDataError($api_code, $data = [], $msg = null, $http_code = null)
+    {
+        return ResponseBuilder::asError($api_code)->withData($data)->withMessage($data['message'] ?? $msg)->withHttpCode($http_code)->build();
+    }
+}
+
+/**
+ * @param null $msg
+ * @param int $api_code
+ * @return \Illuminate\Http\JsonResponse
+ */
+if (!function_exists('respondWithDataError')) {
+
+    function respondBadRequest($msg, $api_code = 400)
+    {
+        return respondWithError($msg ??  trans("builder.http_400"), $api_code);
     }
 }
 
 
-
-// create helper function for response builder error
-if (!function_exists('error')) {
-    /**
-     * @param int $code
-     * @param string $message
-     * @param array $headers
-     * @param int $options
-     * @return \Illuminate\Http\JsonResponse
-     */
-    function error(int $code = 500, string $message = '', array $headers = [], int $options = 0): \Illuminate\Http\JsonResponse
+/**
+ * @param null $msg
+ * @param int $api_code
+ * @return \Illuminate\Http\JsonResponse
+ */
+if (!function_exists('respondUnAuthorizedRequest')) {
+    function respondUnAuthorizedRequest($msg = [], $api_code = 401)
     {
-        return \Taxionus\ResponseBuilder\ResponseBuilder::error($code, $message, $headers, $options);
+        return respondWithError(trans('builder.http_401'), $api_code);
     }
 }
-
-
-// create helper function for response builder unauthorized
-if (!function_exists('unauthorized')) {
-    /**
-     * @param string $message
-     * @param array $headers
-     * @param int $options
-     * @return \Illuminate\Http\JsonResponse
-     */
-    function unauthorized(string $message = '', array $headers = [], int $options = 0): \Illuminate\Http\JsonResponse
-    {
-        // return \Taxionus\ResponseBuilder\ResponseBuilder::unauthorized($message, $headers, $options);
-    }
-}
-
-
