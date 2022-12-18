@@ -16,6 +16,7 @@ namespace Taxionus\ResponseBuilder;
  */
 
 use DateTime;
+use DateTimeZone;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Taxionus\ResponseBuilder\Exceptions as Ex;
@@ -478,7 +479,7 @@ class ResponseBuilder extends ResponseBuilderBase
 
 		$date = new DateTime();
 
-		$date->setTimezone(env("APP_TIMEZONE", 'Asia/Riyadh'));
+		$date->setTimezone(new DateTimeZone(env('APP_TIMEZONE', 'Asia/Riyadh')));
 
 		/** @noinspection PhpUndefinedClassInspection */
 		$response = [
